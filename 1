@@ -1,0 +1,68 @@
+from tkinter import *
+import random
+
+
+def random_point(width=None, height=None):
+    global canvas
+
+    if width is None:
+        width = canvas.winfo_width()
+
+    if height is None:
+        height = canvas.winfo_height()
+
+    x = random.randint(0, width)
+    y = random.randint(0, height)
+
+    return x, y
+
+def triange():
+    x1, y1 = random_point()
+    x2, y2 = random_point()
+    x3, y3 = random_point()
+
+    canvas.create_line(x1, y1, x2, y2, width=3, fill="red")
+    canvas.create_line(x1, y1, x3, y3, width=3, fill="red")
+    canvas.create_line(x3, y3, x2, y2, width=3, fill="red")
+
+
+def rectangle():
+    x1, y1 = random_point()
+    x2, y2 = random_point()
+
+    canvas.create_rectangle(x1, y1, x2, y2, outline="green", width=3)
+
+
+def circle():
+    global canvas
+
+    w = canvas.winfo_width()
+    h = canvas.winfo_height()
+    d = random.randint(1, min(w, h) // 2)
+    x1, y1 = random_point(width=w - d, height=h - d)
+    x2 = x1 + d
+    y2 = y1 + d
+
+    canvas.create_oval(x1, y1, x2, y2, width=3, outline="blue")
+
+
+def draw_shape():
+    global shapes
+    shape = random.choice(shapes)
+    shape()
+
+
+def on_click():
+    global btn, window, canvas
+
+    canvas.delete("all")
+    draw_shape()
+
+shapes = [rectangle, triange, circle]
+window = Tk()
+window.title("Треугольник-Квадрат-Окружность")
+canvas = Canvas(window, width=640, height=480, bg='white')
+canvas.pack()
+btn = Button(window, text="Нарисовать", command=on_click)
+btn.pack()
+window.mainloop()
